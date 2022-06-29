@@ -3,7 +3,7 @@ import tips from './tips';
 import { sortAs } from '../src/Utilities';
 import TableRenderers from '../src/TableRenderers';
 import createPlotlyComponent from 'react-plotly.js/factory';
-import createPlotlyRenderers from '../src/PlotlyRenderers';
+// import createPlotlyRenderers from '../src/PlotlyRenderers';
 import PivotTableUI from '../src/PivotTableUI';
 import '../src/pivottable.css';
 import Dropzone from 'react-dropzone';
@@ -44,14 +44,8 @@ export default class App extends React.Component {
             filename: 'Sample Dataset: Tips',
             pivotState: {
                 data: tips,
-                aggregatorGather: {
-                    aggregatorName: 'Sum over Sum',
-                    vals: ['Tip', 'Total Bill'],
-                },
                 rows: ['Payer Gender'],
                 cols: ['Party Size'],
-                aggregatorName: 'Sum over Sum',
-                vals: ['Tip', 'Total Bill'],
                 rendererName: 'Grouped Column Chart',
                 sorters: {
                     Meal: sortAs(['Lunch', 'Dinner']),
@@ -152,8 +146,9 @@ export default class App extends React.Component {
                 <div className="row">
                     <h2 className="text-center">{this.state.filename}</h2>
                     <br />
-
-                    <PivotTableUISmartWrapper {...this.state.pivotState} />
+                    <div className="wrapper">
+                        <PivotTableUISmartWrapper {...this.state.pivotState} />
+                    </div>
                 </div>
             </div>
         );

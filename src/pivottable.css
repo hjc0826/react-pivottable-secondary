@@ -23,9 +23,8 @@
 }
 
 .pvtUi .pvt-others {
-  flex: 1;
   display: flex;
-  overflow: hidden;
+  height: -webkit-fill-available;
 }
 
 .pvtUi .pvt-others .pvt-others-left {
@@ -62,6 +61,7 @@ table.pvtTable tbody tr th {
 
 table.pvtTable .pvtColLabel {
   text-align: center;
+  white-space: nowrap;
 }
 table.pvtTable .pvtTotalLabel {
   text-align: left;

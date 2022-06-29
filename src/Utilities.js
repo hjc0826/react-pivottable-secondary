@@ -540,9 +540,6 @@ class PivotData {
       'PivotData'
     );
 
-    this.aggregator = this.props.aggregators[this.props.aggregatorName](
-      this.props.vals
-    );
 
     this.allTotals = this.props.aggregatorGather.reduce((pre, cur) => {
       pre[cur.aggregatorName] = this.props.aggregators[cur.aggregatorName](cur.vals)(this, [], [], cur.aggregatorName);
@@ -558,7 +555,6 @@ class PivotData {
     this.colKeys = [];
     this.rowTotals = {};
     this.colTotals = {};
-    this.allTotal = this.aggregator(this, [], []);
     this.sorted = false;
 
     // iterate through input, accumulating data for cells
@@ -633,7 +629,7 @@ class PivotData {
     }
   }
 
-  // todo
+  // 排序规则
   sortKeys() {
     if (!this.sorted) {
       this.sorted = true;
@@ -681,7 +677,6 @@ class PivotData {
               pre.rowOrder.push((a, b) => -naturalSort(v([...a, cur.aggregatorName], []), v([...b, cur.aggregatorName], [])))
               break;
             default:
-              // pre.rowOrder.push(this.arrSort(this.props.rows))
               pre.rowOrder.push(() => (a, b) => { return 0 })
 
           }
@@ -693,7 +688,6 @@ class PivotData {
               pre.colOrder.push((a, b) => -naturalSort(v([], a), v([], b)))
               break;
             default:
-              // pre.colOrder.push(this.arrSort(this.props.cols))
               pre.colOrder.push(() => (a, b) => { return 0 })
           }
           return pre;
@@ -735,7 +729,7 @@ class PivotData {
       const flatRowKey = rowKey.join(String.fromCharCode(0));
       const flatColKey = colKey.join(String.fromCharCode(0));
 
-      this.allTotal.push(record);
+      // this.allTotal.push(record);
       this.allTotals[item.aggregatorName].push(record);
 
       if (rowKey.length !== 0) {
@@ -855,47 +849,33 @@ PivotData.defaultProps = {
   aggregators: aggregators,
   cols: [],
   rows: [],
-  vals: ['reward_did_sum'],
   aggregatorGather: [
-    // {
-    //   aggregatorName: 'Sum',
-    //   vals: ['reward_did_sum'],
-    //   colOrder: 'key_a_to_z',
-    //   rowOrder: 'key_a_to_z'
-    // },
-    // {
-    //   aggregatorName: 'Sum as Fraction of Total',
-    //   vals: ['reward_did_sum'],
-    //   colOrder: 'key_a_to_z',
-    //   rowOrder: 'key_a_to_z'
-    // }
+    {
+      aggregatorName: 'Count', // default
+      vals: [],
+      colOrder: 'key_a_to_z',
+      rowOrder: 'key_a_to_z'
+    }
   ],
-  aggregatorName: 'Sum as Fraction of Total',
   sorters: {},
   valueFilter: {},
   sorterFilter: {},
-  rowOrder: 'key_a_to_z',
-  colOrder: 'key_a_to_z',
   derivedAttributes: {},
 };
 
 PivotData.propTypes = {
   data: PropTypes.oneOfType([PropTypes.array, PropTypes.object, PropTypes.func])
     .isRequired,
-  aggregatorName: PropTypes.string,
   aggregatorGather: PropTypes.arrayOf(PropTypes.object),
   cols: PropTypes.arrayOf(PropTypes.string),
   rows: PropTypes.arrayOf(PropTypes.string),
-  vals: PropTypes.arrayOf(PropTypes.string),
   valueFilter: PropTypes.objectOf(PropTypes.objectOf(PropTypes.bool)),
   sorterFilter: PropTypes.object,
   sorters: PropTypes.oneOfType([
     PropTypes.func,
     PropTypes.objectOf(PropTypes.func),
   ]),
-  derivedAttributes: PropTypes.objectOf(PropTypes.func),
-  rowOrder: PropTypes.oneOf(['key_a_to_z', 'value_a_to_z', 'value_z_to_a']),
-  colOrder: PropTypes.oneOf(['key_a_to_z', 'value_a_to_z', 'value_z_to_a']),
+  derivedAttributes: PropTypes.objectOf(PropTypes.func)
 };
 
 export {

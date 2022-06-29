@@ -56,15 +56,12 @@ function redColorScaleGenerator(values) {
 function makeRenderer(opts = {}) {
   class TableRenderer extends React.PureComponent {
     handleScriptLoad() {
-      console.log($);
       $(document).ready(function () {
         $('.pvtTable').dataTable({ scrollY: '50vh', scrollCollapse: true, paging: false });
       });
     }
     render() {
       const pivotData = new PivotData(this.props);
-      console.log(pivotData, 'pivotData');
-      console.log(this.props, 'props');
       const colAttrs = pivotData.props.cols.length ? concat(pivotData.props.cols, undefined) : [undefined, undefined];
       const rowAttrs = pivotData.props.rows;
       const rowKeys = pivotData.getRowKeys();

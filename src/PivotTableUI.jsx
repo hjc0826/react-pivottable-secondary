@@ -405,7 +405,6 @@ class PivotTableUI extends React.PureComponent {
             preventOnFilter: false,
           }}
           tag="div"
-          // className={ }
           onChange={onChange}
         >
           {items.map(x => (
@@ -432,18 +431,13 @@ class PivotTableUI extends React.PureComponent {
   }
 
   render() {
-    // const numValsAllowed =
-    //   this.props.aggregators[this.props.aggregatorName]([])().numInputs || 0;
-
-    // const aggregatorCellOutlet = this.props.aggregators[
-    //   this.props.aggregatorName
-    // ]([])().outlet;
 
     const rendererName =
       this.props.rendererName in this.props.renderers
         ? this.props.rendererName
         : Object.keys(this.props.renderers)[0];
 
+    // hide
     const rendererCell = (
       <td className="pvtRenderers">
         <Dropdown
@@ -627,8 +621,8 @@ class PivotTableUI extends React.PureComponent {
     const colAttrsCell = this.makeDnDCell(
       colAttrs,
       this.propUpdater('cols'),
-      'pvtAxisContainer pvtHorizList pvtCols',
-      'Column',
+      'pvtAxisContainer pvtHorizList pvtRows',
+      'Row',
       'cols'
     );
 
@@ -640,8 +634,8 @@ class PivotTableUI extends React.PureComponent {
     const rowAttrsCell = this.makeDnDCell(
       rowAttrs,
       this.propUpdater('rows'),
-      'pvtAxisContainer pvtVertList pvtRows',
-      'Row',
+      'pvtAxisContainer pvtVertList pvtCols',
+      'Column',
       'rows'
     );
     const outputCell = (
@@ -654,26 +648,26 @@ class PivotTableUI extends React.PureComponent {
       </div>
     );
 
-    if (this.props.controls.enabled) {
+    if (this.props.controls && this.props.controls.enabled) {
       return (
-        <div className="pvtUi" onClick={() => this.setState({ openDropdown: false })}>
+        <div id="pvtUi" className="pvtUi" onClick={() => this.setState({ openDropdown: false })}>
           {outputCell}
         </div>
       )
     } else {
       return (
-        <div className="pvtUi" onClick={() => this.setState({ openDropdown: false })}>
+        <div id="pvtUi" className="pvtUi" onClick={() => this.setState({ openDropdown: false })}>
           {/* {rendererCell} */}
-          <div className="pvt-data">
+          <div id="pvt-data" className="pvt-data">
             {unusedAttrsCell}
           </div>
           <div className="pvt-others">
             <div className="pvt-others-left">
               {aggregatorCell}
-              {colAttrsCell}
+              {rowAttrsCell}
             </div>
             <div className="pvt-others-right">
-              {rowAttrsCell}
+              {colAttrsCell}
               <div className="pvtAxisContainer pvt-output">
                 {outputCell}
               </div>
@@ -682,40 +676,6 @@ class PivotTableUI extends React.PureComponent {
         </div>
       )
     }
-    // <table className="pvtUi">
-    //   <tbody onClick={() => this.setState({ openDropdown: false })}>
-    //     <tr>
-    //       {rendererCell}
-    //       {unusedAttrsCell}
-    //     </tr>
-    //     <tr>
-    //       {aggregatorCell}
-    //       {colAttrsCell}
-    //     </tr>
-    //     <tr>
-    //       {rowAttrsCell}
-    //       {outputCell}
-    //     </tr>
-    //   </tbody>
-    // </table>
-    // }
-
-    // return (
-    //   <table className="pvtUi">
-    //     <tbody onClick={() => this.setState({ openDropdown: false })}>
-    //       <tr>
-    //         {rendererCell}
-    //         {aggregatorCell}
-    //         {colAttrsCell}
-    //       </tr>
-    //       <tr>
-    //         {unusedAttrsCell}
-    //         {rowAttrsCell}
-    //         {outputCell}
-    //       </tr>
-    //     </tbody>
-    //   </table>
-    // );
   }
 }
 
