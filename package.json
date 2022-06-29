@@ -1,6 +1,6 @@
 {
   "name": "react-pivottable-secondary",
-  "version": "0.0.3",
+  "version": "0.0.5",
   "description": "A React-based pivot table secondary",
   "main": "PivotTableUI.js",
   "files": [
@@ -32,18 +32,18 @@
   },
   "repository": {
     "type": "git",
-    "url": "git+https://github.com/plotly/react-pivottable.git"
+    "url": "git+https://github.com/hjc0826/react-pivottable-secondary"
   },
   "keywords": [
     "react",
     "pivottable"
   ],
-  "author": "Nicolas Kruchten <nicolas@kruchten.com>",
+  "author": "099",
   "license": "MIT",
   "bugs": {
-    "url": "https://github.com/plotly/react-pivottable/issues"
+    "url": "https://github.com/hjc0826/react-pivottable-secondary/issues"
   },
-  "homepage": "https://github.com/plotly/react-pivottable#readme",
+  "homepage": "https://github.com/hjc0826/react-pivottable-secondary/blob/main/README.md",
   "dependencies": {
     "datatables.net-bs": "^1.12.1",
     "datatables.net-fixedcolumns-bs": "^4.1.0",

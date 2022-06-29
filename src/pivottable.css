@@ -25,6 +25,7 @@
 .pvtUi .pvt-others {
   display: flex;
   height: -webkit-fill-available;
+  overflow: auto;
 }
 
 .pvtUi .pvt-others .pvt-others-left {
