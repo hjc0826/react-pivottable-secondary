@@ -154,7 +154,7 @@ function makeRenderer(opts = {}) {
               </tr>
             )}
 
-            {rowAttrs.length === 0 && colKeys.length !== 0 && (
+            {rowAttrs.length === 0 && (
               <tr>
                 <th className="pivotTotalLabel" key="pivotTotalLabelTop" rowSpan={colAttrs.length + (aggregatorGather.length === 0 ? 0 : 1)}>
                   {colAttrs.length === 0 ? 'Totals' : null}
@@ -181,7 +181,7 @@ function makeRenderer(opts = {}) {
                     );
                   })}
 
-                  {(j === 0 && rowKeys.length) && (
+                  {(j === 0) && (
                     <th
                       className="pivotTotalLabel"
                       key={`pivotTotalLabel${j}`}
@@ -194,7 +194,7 @@ function makeRenderer(opts = {}) {
                     </th>
                   ) || <React.Fragment />}
 
-                  {(j === colAttrs.length - 1 && rowKeys.length) && (
+                  {(j === colAttrs.length - 1) && (
                     aggregatorGather.map(function (_, o) {
                       return (
                         <th
@@ -306,7 +306,8 @@ function makeRenderer(opts = {}) {
                 );
               })}
 
-              {(rowKeys.length) && (
+              {/* {(rowKeys.length) && ( */}
+              {(
                 aggregatorGather.map(function (_, o) {
                   const grandTotalAggregator = pivotData.getAggregator([], [], _.aggregatorName);
                   return (
