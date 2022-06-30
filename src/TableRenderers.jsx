@@ -142,6 +142,15 @@ function makeRenderer(opts = {}) {
       return (
         <table className="pivotTable">
           <thead>
+
+            {rowAttrs.length === 0 && colKeys.length === 0 && (
+              <tr>
+                <th className="pivotTotalLabel" key="pivotTotalLabelTop" rowSpan={colAttrs.length + (aggregatorGather.length === 0 ? 0 : 1)}>
+                  {colAttrs.length === 0 ? 'Totals' : null}
+                </th>
+              </tr>
+            )}
+
             {rowAttrs.length !== 0 && (
               <tr>
                 {rowAttrs.map(function (r, i) {
@@ -154,17 +163,12 @@ function makeRenderer(opts = {}) {
               </tr>
             )}
 
-            {rowAttrs.length === 0 && (
-              <tr>
-                <th className="pivotTotalLabel" key="pivotTotalLabelTop" rowSpan={colAttrs.length + (aggregatorGather.length === 0 ? 0 : 1)}>
-                  {colAttrs.length === 0 ? 'Totals' : null}
-                </th>
-              </tr>
-            )}
-
             {colAttrs.map(function (c, j) {
               return (
                 <tr key={`${c}${j}`}>
+                  {colKeys.length && (
+                    <th className="pivotAxisLabel">{c}</th>
+                  ) || <React.Fragment />}
                   {colKeys.map(function (colKey, i) {
                     const x = spanSize(colKeys, i, j);
                     if (x === -1) {
@@ -227,6 +231,11 @@ function makeRenderer(opts = {}) {
                           key={`rowKeyLabel${i}-${j}`}
                           className="pivotRowLabel"
                           rowSpan={x}
+                          colSpan={
+                            j === rowAttrs.length - 1 && colKeys.length !== 0
+                              ? 2
+                              : 1
+                          }
                         >
                           {txt}
                         </th>
@@ -282,7 +291,7 @@ function makeRenderer(opts = {}) {
                 (
                   <th
                     className="pivotTotalLabel"
-                    colSpan={rowAttrs.length}
+                    colSpan={rowAttrs.length + (colKeys.length === 0 ? 0 : 1)}
                   >
                     Totals
                   </th>
@@ -306,7 +315,6 @@ function makeRenderer(opts = {}) {
                 );
               })}
 
-              {/* {(rowKeys.length) && ( */}
               {(
                 aggregatorGather.map(function (_, o) {
                   const grandTotalAggregator = pivotData.getAggregator([], [], _.aggregatorName);
