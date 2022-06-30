@@ -279,7 +279,7 @@ function makeRenderer(opts = {}) {
 
             <tr>
               {
-                colKeys.length && (
+                (
                   <th
                     className="pivotTotalLabel"
                     colSpan={rowAttrs.length}
@@ -306,7 +306,7 @@ function makeRenderer(opts = {}) {
                 );
               })}
 
-              {(colKeys.length && rowKeys.length) && (
+              {(rowKeys.length) && (
                 aggregatorGather.map(function (_, o) {
                   const grandTotalAggregator = pivotData.getAggregator([], [], _.aggregatorName);
                   return (
