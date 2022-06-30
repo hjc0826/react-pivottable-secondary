@@ -57,7 +57,7 @@ function makeRenderer(opts = {}) {
   class TableRenderer extends React.PureComponent {
     handleScriptLoad() {
       $(document).ready(function () {
-        $('.pvtTable').dataTable({ scrollY: '50vh', scrollCollapse: true, paging: false });
+        $('.pivotTable').dataTable({ scrollY: '50vh', scrollCollapse: true, paging: false });
       });
     }
     render() {
@@ -140,13 +140,13 @@ function makeRenderer(opts = {}) {
           : null;
 
       return (
-        <table className="pvtTable">
+        <table className="pivotTable">
           <thead>
             {rowAttrs.length !== 0 && (
               <tr>
                 {rowAttrs.map(function (r, i) {
                   return (
-                    <th className="pvtAxisLabel" colSpan="1" rowSpan={colAttrs.length + (rowAttrs.length === 0 ? 0 : 1)} key={`rowAttr${i}`}>
+                    <th className="pivotAxisLabel" colSpan="1" rowSpan={colAttrs.length + (rowAttrs.length === 0 ? 0 : 1)} key={`rowAttr${i}`}>
                       {r}
                     </th>
                   );
@@ -156,7 +156,7 @@ function makeRenderer(opts = {}) {
 
             {rowAttrs.length === 0 && colKeys.length !== 0 && (
               <tr>
-                <th className="pvtTotalLabel" key="pvtTotalLabelTop" rowSpan={colAttrs.length + (aggregatorGather.length === 0 ? 0 : 1)}>
+                <th className="pivotTotalLabel" key="pivotTotalLabelTop" rowSpan={colAttrs.length + (aggregatorGather.length === 0 ? 0 : 1)}>
                   {colAttrs.length === 0 ? 'Totals' : null}
                 </th>
               </tr>
@@ -172,7 +172,7 @@ function makeRenderer(opts = {}) {
                     }
                     return (
                       <th
-                        className="pvtColLabel"
+                        className="pivotColLabel"
                         key={`colKey${i}${j}`}
                         colSpan={x}
                       >
@@ -183,8 +183,8 @@ function makeRenderer(opts = {}) {
 
                   {(j === 0 && rowKeys.length) && (
                     <th
-                      className="pvtTotalLabel"
-                      key={`pvtTotalLabel${j}`}
+                      className="pivotTotalLabel"
+                      key={`pivotTotalLabel${j}`}
                       colSpan={aggregatorGather.length}
                       rowSpan={
                         colAttrs.length - (aggregatorGather.length === 0 ? 0 : 1)
@@ -199,7 +199,7 @@ function makeRenderer(opts = {}) {
                       return (
                         <th
                           key={`Total${j}${o}`}
-                          className="pvtColLabel pvtRowTotal"
+                          className="pivotColLabel pivotRowTotal"
                         >
                           {`${_.vals.join(' ')}(${_.aggregatorName})`}
                         </th>)
@@ -225,7 +225,7 @@ function makeRenderer(opts = {}) {
                       return (
                         <th
                           key={`rowKeyLabel${i}-${j}`}
-                          className="pvtRowLabel"
+                          className="pivotRowLabel"
                           rowSpan={x}
                         >
                           {txt}
@@ -235,7 +235,7 @@ function makeRenderer(opts = {}) {
                     ||
                     <th
                       key={`rowKeyLabel${i}`}
-                      className="pvtRowLabel"
+                      className="pivotRowLabel"
                     >
                       { }
                     </th>}
@@ -243,8 +243,8 @@ function makeRenderer(opts = {}) {
                     const aggregator = pivotData.getAggregator(rowKey, colKey);
                     return (
                       <td
-                        className="pvtVal"
-                        key={`pvtVal${i}-${j}`}
+                        className="pivotVal"
+                        key={`pivotVal${i}-${j}`}
                         onClick={
                           getClickHandler &&
                           getClickHandler(aggregator.value(), rowKey, colKey)
@@ -262,8 +262,8 @@ function makeRenderer(opts = {}) {
                   {aggregatorGather.map(function (_, j) {
                     const totalAggregator = pivotData.getAggregator([...rowKey, _.aggregatorName], []);
                     return (<td
-                      className="pvtTotal pvtRowTotal"
-                      key={`pvtTotal${i}-${j}-${_.aggregatorName}`}
+                      className="pivotTotal pivotRowTotal"
+                      key={`pivotTotal${i}-${j}-${_.aggregatorName}`}
                       onClick={
                         getClickHandler &&
                         getClickHandler(totalAggregator.value(), rowKey, [null])
@@ -281,7 +281,7 @@ function makeRenderer(opts = {}) {
               {
                 colKeys.length && (
                   <th
-                    className="pvtTotalLabel"
+                    className="pivotTotalLabel"
                     colSpan={rowAttrs.length}
                   >
                     Totals
@@ -293,7 +293,7 @@ function makeRenderer(opts = {}) {
                 const totalAggregator = pivotData.getAggregator([], colKey);
                 return (
                   <td
-                    className="pvtTotal"
+                    className="pivotTotal"
                     key={`total${i}`}
                     onClick={
                       getClickHandler &&
@@ -316,7 +316,7 @@ function makeRenderer(opts = {}) {
                         getClickHandler &&
                         getClickHandler(grandTotalAggregator.value(), [null], [null])
                       }
-                      className="pvtGrandTotal pvtRowTotal"
+                      className="pivotGrandTotal pivotRowTotal"
                     >
                       {grandTotalAggregator.format(grandTotalAggregator.value())}
                     </td>)

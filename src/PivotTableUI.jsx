@@ -67,9 +67,9 @@ export class DraggableAttribute extends React.Component {
       .sort(this.props.sorter);
 
     return (
-      <Draggable handle=".pvtDragHandle">
+      <Draggable handle=".pivotDragHandle">
         <div
-          className="pvtFilterBox"
+          className="pivotFilterBox"
           style={{
             display: 'block',
             cursor: 'initial',
@@ -77,17 +77,17 @@ export class DraggableAttribute extends React.Component {
           }}
           onClick={() => this.props.moveFilterBoxToTop(this.props.name)}
         >
-          <div className="pvtTool">
-            <span className="pvtDragHandle">☰</span>
-            <a onClick={() => this.setState({ open: false })} className="pvtCloseX">
+          <div className="pivotTool">
+            <span className="pivotDragHandle">☰</span>
+            <a onClick={() => this.setState({ open: false })} className="pivotCloseX">
               ×
             </a>
           </div>
-          <div className="pvtFieldTool">
+          <div className="pivotFieldTool">
             <div className="name">{this.props.name}</div>
             <a
               role="button"
-              className="pvtRowOrder"
+              className="pivotRowOrder"
               onClick={() => {
                 this.props.changeSorterFilter(
                   this.props.name,
@@ -108,7 +108,7 @@ export class DraggableAttribute extends React.Component {
               <input
                 type="text"
                 placeholder="Filter values"
-                className="pvtSearch"
+                className="pivotSearch"
                 value={this.state.filterText}
                 onChange={e =>
                   this.setState({
@@ -119,7 +119,7 @@ export class DraggableAttribute extends React.Component {
               <br />
               <a
                 role="button"
-                className="pvtButton"
+                className="pivotButton"
                 onClick={() =>
                   this.props.removeValuesFromFilter(
                     this.props.name,
@@ -133,7 +133,7 @@ export class DraggableAttribute extends React.Component {
               </a>{' '}
               <a
                 role="button"
-                className="pvtButton"
+                className="pivotButton"
                 onClick={() =>
                   this.props.addValuesToFilter(
                     this.props.name,
@@ -149,17 +149,17 @@ export class DraggableAttribute extends React.Component {
           )}
 
           {showMenu && (
-            <div className="pvtCheckContainer">
+            <div className="pivotCheckContainer">
               {shown.map(x => (
                 <p
                   key={x}
                   onClick={() => this.toggleValue(x)}
                   className={x in this.props.valueFilter ? '' : 'selected'}
                 >
-                  <a className="pvtOnly" onClick={e => this.selectOnly(e, x)}>
+                  <a className="pivotOnly" onClick={e => this.selectOnly(e, x)}>
                     only
                   </a>
-                  <a className="pvtOnlySpacer">&nbsp;</a>
+                  <a className="pivotOnlySpacer">&nbsp;</a>
 
                   {x === '' ? <em>null</em> : x}
                 </p>
@@ -179,14 +179,14 @@ export class DraggableAttribute extends React.Component {
   render() {
     const filtered =
       Object.keys(this.props.valueFilter).length !== 0
-        ? 'pvtFilteredAttribute'
+        ? 'pivotFilteredAttribute'
         : '';
     return (
       <li data-id={this.props.name}>
-        <span className={'pvtAttr ' + filtered}>
+        <span className={'pivotAttr ' + filtered}>
           {this.props.name}
           <span
-            className="pvtTriangle"
+            className="pivotTriangle"
             onClick={this.toggleFilterBox.bind(this)}
           >
             {' '}
@@ -221,24 +221,24 @@ DraggableAttribute.propTypes = {
 export class Dropdown extends React.PureComponent {
   render() {
     return (
-      <div className="pvtDropdown" style={{ zIndex: this.props.zIndex }}>
+      <div className="pivotDropdown" style={{ zIndex: this.props.zIndex }}>
         <div
           onClick={e => {
             e.stopPropagation();
             this.props.toggle();
           }}
           className={
-            'pvtDropdownValue pvtDropdownCurrent ' +
-            (this.props.open ? 'pvtDropdownCurrentOpen' : '')
+            'pivotDropdownValue pivotDropdownCurrent ' +
+            (this.props.open ? 'pivotDropdownCurrentOpen' : '')
           }
           role="button"
         >
-          <div className="pvtDropdownIcon">{this.props.open ? '×' : '▾'}</div>
+          <div className="pivotDropdownIcon">{this.props.open ? '×' : '▾'}</div>
           {this.props.current || <span>&nbsp;</span>}
         </div>
 
         {this.props.open && (
-          <div className="pvtDropdownMenu">
+          <div className="pivotDropdownMenu">
             {this.props.values.map(r => (
               <div
                 key={r}
@@ -252,8 +252,8 @@ export class Dropdown extends React.PureComponent {
                   }
                 }}
                 className={
-                  'pvtDropdownValue ' +
-                  (r === this.props.current ? 'pvtDropdownActiveValue' : '')
+                  'pivotDropdownValue ' +
+                  (r === this.props.current ? 'pivotDropdownActiveValue' : '')
                 }
               >
                 {r}
@@ -400,8 +400,8 @@ class PivotTableUI extends React.PureComponent {
         <Sortable
           options={{
             group: 'shared',
-            ghostClass: 'pvtPlaceholder',
-            filter: '.pvtFilterBox',
+            ghostClass: 'pivotPlaceholder',
+            filter: '.pivotFilterBox',
             preventOnFilter: false,
           }}
           tag="div"
@@ -439,7 +439,7 @@ class PivotTableUI extends React.PureComponent {
 
     // hide
     const rendererCell = (
-      <td className="pvtRenderers">
+      <td className="pivotRenderers">
         <Dropdown
           current={rendererName}
           values={Object.keys(this.props.renderers)}
@@ -456,7 +456,7 @@ class PivotTableUI extends React.PureComponent {
     );
 
     const aggregatorCell = (
-      <div className="pvtVals">
+      <div className="pivotVals">
         <div className="name">Values</div>
         <div>
           {
@@ -487,7 +487,7 @@ class PivotTableUI extends React.PureComponent {
                   />
                   <a
                     role="button"
-                    className="pvtRowOrder"
+                    className="pivotRowOrder"
                     onClick={() => {
                       let sorterFilter = cloneDeep(this.props.sorterFilter)
                       this.props.rows.forEach(ele => {
@@ -506,7 +506,7 @@ class PivotTableUI extends React.PureComponent {
                   </a>
                   <a
                     role="button"
-                    className="pvtColOrder"
+                    className="pivotColOrder"
                     onClick={() => {
                       let sorterFilter = cloneDeep(this.props.sorterFilter)
                       this.props.cols.forEach(ele => {
@@ -527,7 +527,7 @@ class PivotTableUI extends React.PureComponent {
                   {index === 0 && (
                     <a
                       role="button"
-                      className="pvtColOrder"
+                      className="pivotColOrder"
                       onClick={() =>
                         this.sendPropUpdate({
                           aggregatorGather: {
@@ -548,7 +548,7 @@ class PivotTableUI extends React.PureComponent {
                   {index !== 0 && (
                     <a
                       role="button"
-                      className="pvtColOrder"
+                      className="pivotColOrder"
                       onClick={() =>
                         this.sendPropUpdate({
                           aggregatorGather: { $splice: [[index, 1]] },
@@ -607,7 +607,7 @@ class PivotTableUI extends React.PureComponent {
     const unusedAttrsCell = this.makeDnDCell(
       unusedAttrs,
       order => this.setState({ unusedOrder: order }),
-      `pvtAxisContainer pvtUnused ${horizUnused ? 'pvtHorizList' : 'pvtVertList'
+      `pivotAxisContainer pivotUnused ${horizUnused ? 'pivotHorizList' : 'pivotVertList'
       }`,
       'Data'
     );
@@ -621,7 +621,7 @@ class PivotTableUI extends React.PureComponent {
     const colAttrsCell = this.makeDnDCell(
       colAttrs,
       this.propUpdater('cols'),
-      'pvtAxisContainer pvtHorizList pvtRows',
+      'pivotAxisContainer pivotHorizList pivotRows',
       'Row',
       'cols'
     );
@@ -634,12 +634,12 @@ class PivotTableUI extends React.PureComponent {
     const rowAttrsCell = this.makeDnDCell(
       rowAttrs,
       this.propUpdater('rows'),
-      'pvtAxisContainer pvtVertList pvtCols',
+      'pivotAxisContainer pivotVertList pivotCols',
       'Column',
       'rows'
     );
     const outputCell = (
-      <div className="pvtOutput">
+      <div className="pivotOutput">
         <PivotTable
           {...update(this.props, {
             data: { $set: this.state.materializedInput },
@@ -650,25 +650,25 @@ class PivotTableUI extends React.PureComponent {
 
     if (this.props.controls && this.props.controls.enabled) {
       return (
-        <div id="pvtUi" className="pvtUi" onClick={() => this.setState({ openDropdown: false })}>
+        <div id="pivotUi" className="pivotUi" onClick={() => this.setState({ openDropdown: false })}>
           {outputCell}
         </div>
       )
     } else {
       return (
-        <div id="pvtUi" className="pvtUi" onClick={() => this.setState({ openDropdown: false })}>
+        <div id="pivotUi" className="pivotUi" onClick={() => this.setState({ openDropdown: false })}>
           {/* {rendererCell} */}
-          <div id="pvt-data" className="pvt-data">
+          <div id="pivot-data" className="pivot-data">
             {unusedAttrsCell}
           </div>
-          <div className="pvt-others">
-            <div className="pvt-others-left">
+          <div className="pivot-others">
+            <div className="pivot-others-left">
               {aggregatorCell}
               {rowAttrsCell}
             </div>
-            <div className="pvt-others-right">
+            <div className="pivot-others-right">
               {colAttrsCell}
-              <div className="pvtAxisContainer pvt-output">
+              <div className="pivotAxisContainer pivot-output">
                 {outputCell}
               </div>
             </div>

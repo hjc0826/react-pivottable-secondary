@@ -1,4 +1,4 @@
-.pvtUi {
+.pivotUi {
   display: flex;
   flex-direction: column;
   color: #2a3f5f;
@@ -8,7 +8,7 @@
   height: 100%;
   min-height: 55vh;
 }
-.pvtUi select {
+.pivotUi select {
   user-select: none;
   -webkit-user-select: none;
   -moz-user-select: none;
@@ -16,35 +16,35 @@
   -ms-user-select: none;
 }
 
-.pvtUi .pvtOutput {
+.pivotUi .pivotOutput {
   vertical-align: top;
   overflow: auto;
   height: 100%;
 }
 
-.pvtUi .pvt-others {
+.pivotUi .pivot-others {
   display: flex;
   height: -webkit-fill-available;
   overflow: auto;
 }
 
-.pvtUi .pvt-others .pvt-others-left {
+.pivotUi .pivot-others .pivot-others-left {
   display: flex;
   flex-direction: column;
 }
 
-.pvtUi .pvt-others .pvt-others-right {
+.pivotUi .pivot-others .pivot-others-right {
   display: flex;
   flex-direction: column;
   overflow: hidden;
   flex: 1;
 }
 
-.pvtUi .pvt-data .pvtUnused {
+.pivotUi .pivot-data .pivotUnused {
   border-bottom: none;
 }
 
-table.pvtTable {
+table.pivotTable {
   font-size: 8pt;
   text-align: left;
   border-collapse: collapse;
@@ -52,23 +52,23 @@ table.pvtTable {
   /* margin-left: 3px; */
   font-family: Verdana;
 }
-table.pvtTable thead tr th,
-table.pvtTable tbody tr th {
+table.pivotTable thead tr th,
+table.pivotTable tbody tr th {
   background-color: #ebf0f8;
   border: 1px solid #c8d4e3;
   font-size: 8pt;
   padding: 5px;
 }
 
-table.pvtTable .pvtColLabel {
+table.pivotTable .pivotColLabel {
   text-align: center;
   white-space: nowrap;
 }
-table.pvtTable .pvtTotalLabel {
+table.pivotTable .pivotTotalLabel {
   text-align: left;
 }
 
-table.pvtTable tbody tr td {
+table.pivotTable tbody tr td {
   color: #2a3f5f;
   padding: 5px;
   background-color: #fff;
@@ -77,13 +77,13 @@ table.pvtTable tbody tr td {
   text-align: right;
 }
 
-.pvtTotal,
-.pvtGrandTotal {
+.pivotTotal,
+.pivotGrandTotal {
   font-weight: bold;
 }
 
-.pvtRowOrder,
-.pvtColOrder {
+.pivotRowOrder,
+.pivotColOrder {
   cursor: pointer;
   width: 15px;
   margin-left: 5px;
@@ -96,8 +96,8 @@ table.pvtTable tbody tr td {
   -ms-user-select: none;
 }
 
-.pvtAxisContainer,
-.pvtVals {
+.pivotAxisContainer,
+.pivotVals {
   border: 1px solid #a2b1c6;
   background: #f2f5fa;
   padding: 5px;
@@ -105,17 +105,17 @@ table.pvtTable tbody tr td {
   min-height: 20px;
 }
 
-.pvtCols {
+.pivotCols {
   flex: 1;
   min-height: 60px;
 }
 
-.pvtRenderers {
+.pivotRenderers {
   padding-left: 5px;
   user-select: none;
 }
 
-.pvtDropdown {
+.pivotDropdown {
   display: inline-block;
   position: relative;
   -webkit-user-select: none;
@@ -125,11 +125,11 @@ table.pvtTable tbody tr td {
   margin: 3px;
 }
 
-.pvtDropdownIcon {
+.pivotDropdownIcon {
   float: right;
   color: #a2b1c6;
 }
-.pvtDropdownCurrent {
+.pivotDropdownCurrent {
   text-align: left;
   border: 1px solid #a2b1c6;
   border-radius: 4px;
@@ -140,11 +140,11 @@ table.pvtTable tbody tr td {
   background: white;
 }
 
-.pvtDropdownCurrentOpen {
+.pivotDropdownCurrentOpen {
   border-radius: 4px 4px 0 0;
 }
 
-.pvtDropdownMenu {
+.pivotDropdownMenu {
   background: white;
   position: absolute;
   width: 100%;
@@ -155,16 +155,16 @@ table.pvtTable tbody tr td {
   box-sizing: border-box;
 }
 
-.pvtDropdownValue {
+.pivotDropdownValue {
   padding: 2px 5px;
   font-size: 12px;
   text-align: left;
 }
-.pvtDropdownActiveValue {
+.pivotDropdownActiveValue {
   background: #ebf0f8;
 }
 
-.pvtVals {
+.pivotVals {
   text-align: center;
   white-space: nowrap;
   vertical-align: top;
@@ -172,46 +172,46 @@ table.pvtTable tbody tr td {
   border-bottom: none !important;
 }
 
-.pvtVals .name {
+.pivotVals .name {
   text-align: left;
 }
 
-.pvtRows {
+.pivotRows {
   min-height: 68px;
   border-left: none !important;
   border-bottom: none !important;
 }
 
-.pvt-output {
+.pivot-output {
   border-left: none !important;
 }
 
-.pvt-output {
+.pivot-output {
   flex: 1;
 }
 
-.pvtAxisContainer .name {
+.pivotAxisContainer .name {
   font-weight: 500;
 }
 
-.pvtAxisContainer li {
+.pivotAxisContainer li {
   display: inline-block;
   padding: 8px 6px;
   list-style-type: none;
   cursor: move;
 }
-.pvtAxisContainer li.pvtPlaceholder {
+.pivotAxisContainer li.pivotPlaceholder {
   -webkit-border-radius: 5px;
   padding: 3px 15px;
   -moz-border-radius: 5px;
   border-radius: 5px;
   border: 1px dashed #a2b1c6;
 }
-.pvtAxisContainer li.pvtPlaceholder span.pvtAttr {
+.pivotAxisContainer li.pivotPlaceholder span.pivotAttr {
   display: none;
 }
 
-.pvtAxisContainer li span.pvtAttr {
+.pivotAxisContainer li span.pivotAttr {
   -webkit-text-size-adjust: 100%;
   background: #f3f6fa;
   border: 1px solid #c8d4e3;
@@ -227,44 +227,44 @@ table.pvtTable tbody tr td {
   -ms-user-select: none;
 }
 
-.pvtTriangle {
+.pivotTriangle {
   cursor: pointer;
   color: #506784;
 }
 
-.pvtHorizList li {
+.pivotHorizList li {
   display: inline-block;
 }
-.pvtVertList {
+.pivotVertList {
   vertical-align: top;
 }
 
-.pvtFilteredAttribute {
+.pivotFilteredAttribute {
   font-style: italic;
 }
 
-.sortable-chosen .pvtFilterBox {
+.sortable-chosen .pivotFilterBox {
   display: none !important;
 }
 
-.pvtTool {
+.pivotTool {
   display: flex;
   justify-content: space-between;
   font-size: 18px;
   padding: 0 7px;
 }
 
-.pvtFieldTool {
+.pivotFieldTool {
   display: flex;
   justify-content: space-between;
   padding: 0 7px;
 }
 
-.pvtFieldTool .name {
+.pivotFieldTool .name {
   color: #717171;
 }
 
-.pvtOrder {
+.pivotOrder {
   position: absolute;
   right: 5px;
   top: 5px;
@@ -273,17 +273,17 @@ table.pvtTable tbody tr td {
   text-decoration: none !important;
 }
 
-.pvtCloseX {
+.pivotCloseX {
   cursor: pointer;
   text-decoration: none !important;
 }
 
-.pvtDragHandle {
+.pivotDragHandle {
   cursor: move;
   color: #a2b1c6;
 }
 
-.pvtButton {
+.pivotButton {
   color: #506784;
   border-radius: 5px;
   padding: 3px 6px;
@@ -296,16 +296,16 @@ table.pvtTable tbody tr td {
   text-decoration: none !important;
 }
 
-.pvtButton:hover {
+.pivotButton:hover {
   background: #e2e8f0;
   border-color: #a2b1c6;
 }
 
-.pvtButton:active {
+.pivotButton:active {
   background: #d1dae6;
 }
 
-.pvtFilterBox input {
+.pivotFilterBox input {
   border: 1px solid #c8d4e3;
   border-radius: 5px;
   color: #506784;
@@ -313,12 +313,12 @@ table.pvtTable tbody tr td {
   font-size: 14px;
 }
 
-.pvtFilterBox input:focus {
+.pivotFilterBox input:focus {
   border-color: #119dff;
   outline: none;
 }
 
-.pvtFilterBox {
+.pivotFilterBox {
   z-index: 100;
   width: 300px;
   border: 1px solid #506784;
@@ -333,22 +333,22 @@ table.pvtTable tbody tr td {
   -ms-user-select: none;
 }
 
-.pvtFilterBox h4 {
+.pivotFilterBox h4 {
   margin: 15px;
 }
-.pvtFilterBox p {
+.pivotFilterBox p {
   margin: 10px auto;
 }
-.pvtFilterBox button {
+.pivotFilterBox button {
   color: #2a3f5f;
 }
-.pvtFilterBox input[type='text'] {
+.pivotFilterBox input[type='text'] {
   width: 230px;
   color: #2a3f5f;
   margin-bottom: 5px;
 }
 
-.pvtCheckContainer {
+.pivotCheckContainer {
   text-align: left;
   font-size: 14px;
   white-space: nowrap;
@@ -358,18 +358,18 @@ table.pvtTable tbody tr td {
   border-top: 1px solid #dfe8f3;
 }
 
-.pvtCheckContainer p {
+.pivotCheckContainer p {
   margin: 0;
   margin-bottom: 1px;
   padding: 3px;
   cursor: default;
 }
 
-.pvtCheckContainer p.selected {
+.pivotCheckContainer p.selected {
   background: #ebf0f8;
 }
 
-.pvtOnly {
+.pivotOnly {
   display: none;
   width: 35px;
   float: left;
@@ -378,19 +378,19 @@ table.pvtTable tbody tr td {
   cursor: pointer;
 }
 
-.pvtOnlySpacer {
+.pivotOnlySpacer {
   display: block;
   width: 35px;
   float: left;
 }
 
-.pvtCheckContainer p:hover .pvtOnly {
+.pivotCheckContainer p:hover .pivotOnly {
   display: block;
 }
-.pvtCheckContainer p:hover .pvtOnlySpacer {
+.pivotCheckContainer p:hover .pivotOnlySpacer {
   display: none;
 }
 
-.pvtRendererArea {
+.pivotRendererArea {
   padding: 5px;
 }
