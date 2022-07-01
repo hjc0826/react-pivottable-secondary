@@ -146,11 +146,18 @@ function makeRenderer(opts = {}) {
             {colAttrs.map(function (c, j) {
               return (
                 <tr key={`${c}${j}`}>
+
+                  {
+                    rowAttrs.length === 0 && colKeys.length === 0 && (
+                      <th colSpan={rowAttrs.length} rowSpan={colAttrs.length - 1} />
+                    ) || null
+                  }
+
                   {j === 0 && rowAttrs.length !== 0
                     && (
                       <th colSpan={rowAttrs.length} rowSpan={colAttrs.length - 1} />
                     )
-                    || (rowAttrs.length !== 0 && (
+                    || (rowAttrs.length !== 0 && j === colAttrs.length - 1 && (
                       rowAttrs.map(function (r, i) {
                         return (
                           <th className="pivotAxisLabel" key={`rowAttr${i}`}>
