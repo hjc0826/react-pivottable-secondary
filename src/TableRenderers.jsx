@@ -143,32 +143,27 @@ function makeRenderer(opts = {}) {
         <table className="pivotTable">
           <thead>
 
-            {rowAttrs.length === 0 && colKeys.length === 0 && (
-              <tr>
-                <th className="pivotTotalLabel" key="pivotTotalLabelTop" rowSpan={colAttrs.length + (aggregatorGather.length === 0 ? 0 : 1)}>
-                  {colAttrs.length === 0 ? 'Totals' : null}
-                </th>
-              </tr>
-            )}
-
-            {rowAttrs.length !== 0 && (
-              <tr>
-                {rowAttrs.map(function (r, i) {
-                  return (
-                    <th className="pivotAxisLabel" colSpan="1" rowSpan={colAttrs.length + (rowAttrs.length === 0 ? 0 : 1)} key={`rowAttr${i}`}>
-                      {r}
-                    </th>
-                  );
-                })}
-              </tr>
-            )}
-
             {colAttrs.map(function (c, j) {
               return (
                 <tr key={`${c}${j}`}>
+                  {j === 0 && rowAttrs.length !== 0
+                    && (
+                      <th colSpan={rowAttrs.length} rowSpan={colAttrs.length - 1} />
+                    )
+                    || (rowAttrs.length !== 0 && (
+                      rowAttrs.map(function (r, i) {
+                        return (
+                          <th className="pivotAxisLabel" key={`rowAttr${i}`}>
+                            {r}
+                          </th>
+                        );
+                      })
+                    ))}
+
                   {colKeys.length && (
-                    <th className="pivotAxisLabel">{c}</th>
-                  ) || <React.Fragment />}
+                    <th className="pvtAxisLabel">{c}</th>
+                  ) || null}
+
                   {colKeys.map(function (colKey, i) {
                     const x = spanSize(colKeys, i, j);
                     if (x === -1) {
@@ -213,6 +208,7 @@ function makeRenderer(opts = {}) {
                 </tr>
               );
             })}
+
           </thead>
 
           <tbody>
