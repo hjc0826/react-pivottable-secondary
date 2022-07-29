@@ -72,17 +72,18 @@ function makeRenderer(opts = {}) {
       let valueCellColors = () => { };
       let rowTotalColors = () => { };
       let colTotalColors = () => { };
+      // todo
       if (opts.heatmapMode) {
         const colorScaleGenerator = this.props.tableColorScaleGenerator;
-        const rowTotalValues = colKeys.map(x =>
-          pivotData.getAggregator([], x).value()
-        );
-        rowTotalColors = colorScaleGenerator(rowTotalValues);
-        const colTotalValues = rowKeys.map(x =>
-          pivotData.getAggregator(x, []).value()
-        );
-        colTotalColors = colorScaleGenerator(colTotalValues);
-
+        // const rowTotalValues = colKeys.map(x =>
+        //   pivotData.getAggregator([], x).value()
+        // );
+        // rowTotalColors = colorScaleGenerator(rowTotalValues);
+        // const colTotalValues = rowKeys.map(x =>
+        //   pivotData.getAggregator(x, []).value()
+        // );
+        // colTotalColors = colorScaleGenerator(colTotalValues);
+        console.log(rowKeys, colKeys);
         if (opts.heatmapMode === 'full') {
           const allValues = [];
           rowKeys.map(r =>

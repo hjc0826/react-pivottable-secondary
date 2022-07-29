@@ -437,7 +437,7 @@ class PivotTableUI extends React.PureComponent {
         ? this.props.rendererName
         : Object.keys(this.props.renderers)[0];
 
-    // hide
+    // table type （hide）
     const rendererCell = (
       <td className="pivotRenderers">
         <Dropdown
