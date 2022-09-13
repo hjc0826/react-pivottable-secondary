@@ -44,8 +44,8 @@ export default class App extends React.Component {
             filename: 'Sample Dataset: Tips',
             pivotState: {
                 data: tips,
-                rows: ['Payer Gender'],
-                cols: ['Party Size'],
+                rows: ['Payer Gender', 'Total Bill'],
+                cols: ['Party Size', 'Tip'],
                 rendererName: 'Grouped Column Chart',
                 sorters: {
                     Meal: sortAs(['Lunch', 'Dinner']),

@@ -15,6 +15,34 @@
   -ms-user-select: none;
 }
 
+.pivotUi .pivot-table-warp {
+  clear: both;
+  height: 100%;
+}
+
+.pivotUi .pivot-table-container {
+  height: 100%;
+  display: flex;
+  flex-direction: column;
+}
+
+.pivotUi .pivot-table-container .pivot-table-body {
+  overflow: auto scroll;
+  flex: 1;
+}
+
+.pivotUi .pivot-table-container .pivot-table-header {
+  overflow-y: auto;
+}
+
+.pivotUi .pivot-table-container .pivot-table-header > tr > td {
+  /* transition: background .3s ease; */
+}
+
+.pivotUi .pivot-table-container .pivot-table-header::-webkit-scrollbar {
+  display: none;
+}
+
 .pivotUi .pivotOutput {
   vertical-align: top;
   overflow: auto;
@@ -46,15 +74,18 @@
 table.pivotTable {
   font-size: 8pt;
   text-align: left;
-  border-collapse: collapse;
+  border-collapse: separate;
   /* margin-top: 3px; */
   /* margin-left: 3px; */
   font-family: Verdana;
+  table-layout: fixed;
+  width: 100%;
 }
 table.pivotTable thead tr th,
 table.pivotTable tbody tr th {
   background-color: #ebf0f8;
-  border: 1px solid #c8d4e3;
+  /* border: 1px solid #c8d4e3; */
+  border: 1px solid rgba(0,0,0,.06);
   font-size: 8pt;
   padding: 5px;
 }
@@ -71,7 +102,8 @@ table.pivotTable tbody tr td {
   color: #2a3f5f;
   padding: 5px;
   background-color: #fff;
-  border: 1px solid #c8d4e3;
+  /* border: 1px solid #c8d4e3; */
+  border: 1px solid rgba(0,0,0,.06);
   vertical-align: top;
   text-align: right;
 }

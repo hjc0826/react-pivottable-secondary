@@ -1,6 +1,6 @@
 {
   "name": "react-pivottable-secondary",
-  "version": "0.0.15",
+  "version": "0.0.16",
   "description": "A React-based pivot table secondary",
   "main": "PivotTableUI.js",
   "files": [
@@ -50,7 +50,7 @@
     "datatables.net-fixedheader-bs": "^3.2.4",
     "datatables.net-scroller-bs": "^2.0.7",
     "immutability-helper": "^2.3.1",
-    "jquery": "^3.6.0",
+    "jquery": "^3.6.1",
     "prop-types": "^15.5.10",
     "react-draggable": "^3.0.3",
     "react-load-script": "0.0.6",

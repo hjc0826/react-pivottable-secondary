@@ -1,7 +1,8 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 import { PivotData } from './Utilities';
-import { concat } from 'lodash';
+import { concat, throttle } from 'lodash';
+import $ from 'jquery';
 
 // helper function for setting row/col-span in pivotTableRenderer
 const spanSize = function (arr, i, j) {
@@ -60,6 +61,17 @@ function makeRenderer(opts = {}) {
         $('.pivotTable').dataTable({ scrollY: '50vh', scrollCollapse: true, paging: false });
       });
     }
+    asyncTableScroll() {
+      var scrollLeft = $(this).prop('scrollLeft');
+      $('.pivot-table-header').prop('scrollLeft', scrollLeft);
+    }
+    componentDidMount() {
+      // 同步两边的滚动
+      $('.pivot-table-body').on('scroll', this.asyncTableScroll);
+    }
+    componentWillUnmount() {
+      $('.pivot-table-body').off('scroll')
+    }
     render() {
       const pivotData = new PivotData(this.props);
       const colAttrs = pivotData.props.cols.length ? concat(pivotData.props.cols, undefined) : [undefined, undefined];
@@ -83,7 +95,6 @@ function makeRenderer(opts = {}) {
         //   pivotData.getAggregator(x, []).value()
         // );
         // colTotalColors = colorScaleGenerator(colTotalValues);
-        console.log(rowKeys, colKeys);
         if (opts.heatmapMode === 'full') {
           const allValues = [];
           rowKeys.map(r =>
@@ -141,203 +152,270 @@ function makeRenderer(opts = {}) {
           : null;
 
       return (
-        <table className="pivotTable">
-          <thead>
-
-            {colAttrs.map(function (c, j) {
-              return (
-                <tr key={`${c}${j}`}>
-
+        <div className="pivot-table-warp">
+          <div className="pivot-table-container">
+            <div className="pivot-table-header">
+              <table className="pivotTable">
+                <colgroup>
                   {
                     rowAttrs.length === 0 && colKeys.length === 0 && (
-                      <th colSpan={rowAttrs.length} rowSpan={colAttrs.length - 1} />
-                    ) || null
+                      <col style={{ width: '120px' }} />
+                    )
                   }
 
-                  {j === 0 && rowAttrs.length !== 0
-                    && (
-                      <th colSpan={rowAttrs.length} rowSpan={colAttrs.length - 1} />
-                    )
-                    || (rowAttrs.length !== 0 && j === colAttrs.length - 1 && (
-                      rowAttrs.map(function (r, i) {
-                        return (
-                          <th className="pivotAxisLabel" key={`rowAttr${i}`}>
-                            {r}
-                          </th>
-                        );
-                      })
-                    ))}
-
+                  {(rowAttrs.length !== 0 && (
+                    rowAttrs.map(function (r, i) {
+                      return (
+                        <col style={{ width: '120px' }} />
+                      );
+                    })
+                  ))}
                   {colKeys.length && (
-                    <th className="pvtAxisLabel">{c}</th>
+                    <col style={{ width: '120px' }} />
                   ) || null}
-
                   {colKeys.map(function (colKey, i) {
-                    const x = spanSize(colKeys, i, j);
-                    if (x === -1) {
-                      return null;
-                    }
                     return (
-                      <th
-                        className="pivotColLabel"
-                        key={`colKey${i}${j}`}
-                        colSpan={x}
-                      >
-                        {colKey[j]}
-                      </th>
+                      <col style={{ width: '120px' }} />
+                    );
+                  })}
+                  {(
+                    aggregatorGather.map(function (_, o) {
+                      return (
+                        <col style={{ width: '120px' }} />
+                      )
+                    })
+                  ) || <React.Fragment />}
+                </colgroup>
+                <thead>
+                  {colAttrs.map(function (c, j) {
+                    return (
+                      <tr key={`${c}${j}`}>
+
+                        {
+                          rowAttrs.length === 0 && colKeys.length === 0 && (
+                            <th colSpan={rowAttrs.length} rowSpan={colAttrs.length - 1} />
+                          ) || null
+                        }
+
+                        {j === 0 && rowAttrs.length !== 0
+                          && (
+                            <th colSpan={rowAttrs.length} rowSpan={colAttrs.length - 1} style={{ position: 'sticky', zIndex: 2, left: 0 }} />
+                          )
+                          || (rowAttrs.length !== 0 && j === colAttrs.length - 1 && (
+                            rowAttrs.map(function (r, i) {
+                              return (
+                                <th style={{ position: 'sticky', zIndex: 2, left: i * 120 + 'px' }} className="pivotAxisLabel" key={`rowAttr${i}`}>
+                                  {r}
+                                </th>
+                              );
+                            })
+                          ))}
+
+                        {colKeys.length && (
+                          <th style={{ position: 'sticky', zIndex: 2, left: rowAttrs.length * 120 + 'px' }} className="pvtAxisLabel">{c}</th>
+                        ) || null}
+
+                        {colKeys.map(function (colKey, i) {
+                          const x = spanSize(colKeys, i, j);
+                          if (x === -1) {
+                            return null;
+                          }
+                          return (
+                            <th
+                              className="pivotColLabel"
+                              key={`colKey${i}${j}`}
+                              colSpan={x}
+                            >
+                              {colKey[j]}
+                            </th>
+                          );
+                        })}
+
+                        {/* total */}
+                        {(j === 0) && (
+                          <th
+                            className="pivotTotalLabel"
+                            key={`pivotTotalLabel${j}`}
+                            colSpan={aggregatorGather.length}
+                            rowSpan={
+                              colAttrs.length - (aggregatorGather.length === 0 ? 0 : 1)
+                            }
+                          >
+                            Totals
+                          </th>
+                        ) || <React.Fragment />}
+
+                        {/* total 细分维度 */}
+                        {(j === colAttrs.length - 1) && (
+                          aggregatorGather.map(function (_, o) {
+                            return (
+                              <th
+                                key={`Total${j}${o}`}
+                                className="pivotColLabel pivotRowTotal"
+                              >
+                                {`${_.vals.join(' ')}(${_.aggregatorName})`}
+                              </th>)
+                          })
+                        ) || <React.Fragment />}
+
+                      </tr>
                     );
                   })}
 
-                  {(j === 0) && (
-                    <th
-                      className="pivotTotalLabel"
-                      key={`pivotTotalLabel${j}`}
-                      colSpan={aggregatorGather.length}
-                      rowSpan={
-                        colAttrs.length - (aggregatorGather.length === 0 ? 0 : 1)
-                      }
-                    >
-                      Totals
-                    </th>
-                  ) || <React.Fragment />}
-
-                  {(j === colAttrs.length - 1) && (
-                    aggregatorGather.map(function (_, o) {
-                      return (
-                        <th
-                          key={`Total${j}${o}`}
-                          className="pivotColLabel pivotRowTotal"
-                        >
-                          {`${_.vals.join(' ')}(${_.aggregatorName})`}
-                        </th>)
-                    })
-                  ) || <React.Fragment />}
-
-                </tr>
-              );
-            })}
-
-          </thead>
-
-          <tbody>
-            {rowKeys.map(function (rowKey, i) {
-              return (
-                <tr key={`rowKeyRow${i}`}>
-                  {rowKey.length
+                </thead>
+              </table>
+            </div>
+            <div className="pivot-table-body">
+              <table className="pivotTable">
+                <colgroup>
+                  {rowAttrs.length
                     &&
-                    rowKey.map(function (txt, j) {
-                      const x = spanSize(rowKeys, i, j);
-                      if (x === -1) {
-                        return null;
-                      }
+                    rowAttrs.map(function (txt, j) {
                       return (
-                        <th
-                          key={`rowKeyLabel${i}-${j}`}
-                          className="pivotRowLabel"
-                          rowSpan={x}
-                          colSpan={
-                            j === rowAttrs.length - 1 && colKeys.length !== 0
-                              ? 2
-                              : 1
-                          }
-                        >
-                          {txt}
-                        </th>
+                        <col style={{ width: '120px' }} />
                       );
                     })
                     ||
-                    <th
-                      key={`rowKeyLabel${i}`}
-                      className="pivotRowLabel"
-                    >
-                      { }
-                    </th>}
+                    <col style={{ width: '120px' }} />}
+                  {/* todo */}
+                  {rowAttrs.length !== 0 && colKeys.length !== 0
+                    && (
+                      <col style={{ width: '120px' }} />
+                    )
+                  }
                   {colKeys.map(function (colKey, j) {
-                    const aggregator = pivotData.getAggregator(rowKey, colKey);
                     return (
-                      <td
-                        className="pivotVal"
-                        key={`pivotVal${i}-${j}`}
-                        onClick={
-                          getClickHandler &&
-                          getClickHandler(aggregator.value(), rowKey, colKey)
-                        }
-                        style={valueCellColors(
-                          rowKey,
-                          colKey,
-                          aggregator.value()
-                        )}
-                      >
-                        {aggregator.format(aggregator.value())}
-                      </td>
+                      <col style={{ width: '120px' }} />
                     );
                   })}
                   {aggregatorGather.map(function (_, j) {
-                    const totalAggregator = pivotData.getAggregator([...rowKey, _.aggregatorName], []);
-                    return (<td
-                      className="pivotTotal pivotRowTotal"
-                      key={`pivotTotal${i}-${j}-${_.aggregatorName}`}
-                      onClick={
-                        getClickHandler &&
-                        getClickHandler(totalAggregator.value(), rowKey, [null])
-                      }
-                      style={colTotalColors(totalAggregator.value())}
-                    >
-                      {totalAggregator.format(totalAggregator.value())}
-                    </td>)
+                    return (<col style={{ width: '120px' }} />)
                   })}
-                </tr>
-              );
-            })}
+                </colgroup>
+                <tbody>
+                  {rowKeys.map(function (rowKey, i) {
+                    return (
+                      <tr key={`rowKeyRow${i}`}>
+                        {rowKey.length
+                          &&
+                          rowKey.map(function (txt, j) {
+                            const x = spanSize(rowKeys, i, j);
+                            if (x === -1) {
+                              return null;
+                            }
+                            return (
+                              <th
+                                key={`rowKeyLabel${i}-${j}`}
+                                className="pivotRowLabel"
+                                rowSpan={x}
+                                colSpan={
+                                  j === rowAttrs.length - 1 && colKeys.length !== 0
+                                    ? 2
+                                    : 1
+                                }
+                                style={{ position: 'sticky', zIndex: 2, left: (j) * 120 + 'px' }}
+                              >
+                                {txt}
+                              </th>
+                            );
+                          })
+                          ||
+                          <th
+                            key={`rowKeyLabel${i}`}
+                            className="pivotRowLabel"
+                          >
+                            { }
+                          </th>}
+                        {colKeys.map(function (colKey, j) {
+                          const aggregator = pivotData.getAggregator(rowKey, colKey);
+                          return (
+                            <td
+                              className="pivotVal"
+                              key={`pivotVal${i}-${j}`}
+                              onClick={
+                                getClickHandler &&
+                                getClickHandler(aggregator.value(), rowKey, colKey)
+                              }
+                              style={valueCellColors(
+                                rowKey,
+                                colKey,
+                                aggregator.value()
+                              )}
+                            >
+                              {aggregator.format(aggregator.value())}
+                            </td>
+                          );
+                        })}
+                        {aggregatorGather.map(function (_, j) {
+                          const totalAggregator = pivotData.getAggregator([...rowKey, _.aggregatorName], []);
+                          return (<td
+                            className="pivotTotal pivotRowTotal"
+                            key={`pivotTotal${i}-${j}-${_.aggregatorName}`}
+                            onClick={
+                              getClickHandler &&
+                              getClickHandler(totalAggregator.value(), rowKey, [null])
+                            }
+                            style={colTotalColors(totalAggregator.value())}
+                          >
+                            {totalAggregator.format(totalAggregator.value())}
+                          </td>)
+                        })}
+                      </tr>
+                    );
+                  })}
 
-            <tr>
-              {
-                (
-                  <th
-                    className="pivotTotalLabel"
-                    colSpan={rowAttrs.length + (colKeys.length === 0 ? 0 : 1)}
-                  >
-                    Totals
-                  </th>
-                ) || <React.Fragment />
-              }
-
-              {colKeys.map(function (colKey, i) {
-                const totalAggregator = pivotData.getAggregator([], colKey);
-                return (
-                  <td
-                    className="pivotTotal"
-                    key={`total${i}`}
-                    onClick={
-                      getClickHandler &&
-                      getClickHandler(totalAggregator.value(), [null], colKey)
+                  <tr>
+                    {
+                      (
+                        <th
+                          className="pivotTotalLabel"
+                          colSpan={rowAttrs.length + (colKeys.length === 0 ? 0 : 1)}
+                          style={{ position: 'sticky', zIndex: 2, left: 0 }}
+                        >
+                          Totals
+                        </th>
+                      ) || <React.Fragment />
                     }
-                    style={rowTotalColors(totalAggregator.value())}
-                  >
-                    {totalAggregator.format(totalAggregator.value())}
-                  </td>
-                );
-              })}
 
-              {(
-                aggregatorGather.map(function (_, o) {
-                  const grandTotalAggregator = pivotData.getAggregator([], [], _.aggregatorName);
-                  return (
-                    <td
-                      key={`aggregatorGather${o}`}
-                      onClick={
-                        getClickHandler &&
-                        getClickHandler(grandTotalAggregator.value(), [null], [null])
-                      }
-                      className="pivotGrandTotal pivotRowTotal"
-                    >
-                      {grandTotalAggregator.format(grandTotalAggregator.value())}
-                    </td>)
-                })) || <React.Fragment />
-              }
-            </tr>
-          </tbody>
-        </table>
+                    {colKeys.map(function (colKey, i) {
+                      const totalAggregator = pivotData.getAggregator([], colKey);
+                      return (
+                        <td
+                          className="pivotTotal"
+                          key={`total${i}`}
+                          onClick={
+                            getClickHandler &&
+                            getClickHandler(totalAggregator.value(), [null], colKey)
+                          }
+                          style={rowTotalColors(totalAggregator.value())}
+                        >
+                          {totalAggregator.format(totalAggregator.value())}
+                        </td>
+                      );
+                    })}
+
+                    {(
+                      aggregatorGather.map(function (_, o) {
+                        const grandTotalAggregator = pivotData.getAggregator([], [], _.aggregatorName);
+                        return (
+                          <td
+                            key={`aggregatorGather${o}`}
+                            onClick={
+                              getClickHandler &&
+                              getClickHandler(grandTotalAggregator.value(), [null], [null])
+                            }
+                            className="pivotGrandTotal pivotRowTotal"
+                          >
+                            {grandTotalAggregator.format(grandTotalAggregator.value())}
+                          </td>)
+                      })) || <React.Fragment />
+                    }
+                  </tr>
+                </tbody>
+              </table>
+            </div>
+          </div>
+        </div>
       );
     }
   }
