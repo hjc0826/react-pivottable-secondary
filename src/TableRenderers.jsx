@@ -1,7 +1,8 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 import { PivotData } from './Utilities';
-import { concat, throttle } from 'lodash';
+import { concat, debounce } from 'lodash';
+import raf from 'rc-util/lib/raf';
 import $ from 'jquery';
 
 // helper function for setting row/col-span in pivotTableRenderer
@@ -54,6 +55,9 @@ function redColorScaleGenerator(values) {
   };
 }
 
+let ticking = false
+let duration = 450
+
 function makeRenderer(opts = {}) {
   class TableRenderer extends React.PureComponent {
     handleScriptLoad() {
@@ -61,13 +65,27 @@ function makeRenderer(opts = {}) {
         $('.pivotTable').dataTable({ scrollY: '50vh', scrollCollapse: true, paging: false });
       });
     }
-    asyncTableScroll() {
-      var scrollLeft = $(this).prop('scrollLeft');
-      $('.pivot-table-header').prop('scrollLeft', scrollLeft);
+
+    onScroll() {
+      let self = this
+      const startTime = Date.now();
+      function asyncTableScroll() {
+        const timestamp = Date.now();
+        const time = timestamp - startTime;
+        console.log(time, 'time');
+        var scrollLeft = $(self).prop('scrollLeft');
+        $('.pivot-table-header').prop('scrollLeft', scrollLeft);
+        ticking = false;
+      }
+      if (!ticking) {
+        raf(asyncTableScroll);
+        ticking = true;
+      }
+
     }
     componentDidMount() {
       // 同步两边的滚动
-      $('.pivot-table-body').on('scroll', this.asyncTableScroll);
+      $('.pivot-table-body').on('scroll', this.onScroll);
     }
     componentWillUnmount() {
       $('.pivot-table-body').off('scroll')
