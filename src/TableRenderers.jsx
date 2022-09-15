@@ -56,23 +56,26 @@ function redColorScaleGenerator(values) {
 }
 
 let ticking = false
-let duration = 450
 
 function makeRenderer(opts = {}) {
   class TableRenderer extends React.PureComponent {
+    constructor(props) {
+      super(props);
+      this.state = { name: 1 }
+    }
     handleScriptLoad() {
       $(document).ready(function () {
         $('.pivotTable').dataTable({ scrollY: '50vh', scrollCollapse: true, paging: false });
       });
     }
-
+    asyncTableScroll() {
+      this.setState((state) => ({ name: state.name + 1 }));
+      var scrollLeft = $(this).prop('scrollLeft');
+      $('.pivot-table-header').prop('scrollLeft', scrollLeft);
+    }
     onScroll() {
       let self = this
-      const startTime = Date.now();
       function asyncTableScroll() {
-        const timestamp = Date.now();
-        const time = timestamp - startTime;
-        console.log(time, 'time');
         var scrollLeft = $(self).prop('scrollLeft');
         $('.pivot-table-header').prop('scrollLeft', scrollLeft);
         ticking = false;
@@ -85,7 +88,7 @@ function makeRenderer(opts = {}) {
     }
     componentDidMount() {
       // 同步两边的滚动
-      $('.pivot-table-body').on('scroll', this.onScroll);
+      $('.pivot-table-body').on('scroll', this.asyncTableScroll);
     }
     componentWillUnmount() {
       $('.pivot-table-body').off('scroll')
@@ -171,6 +174,7 @@ function makeRenderer(opts = {}) {
 
       return (
         <div className="pivot-table-warp">
+          {this.state.name}
           <div className="pivot-table-container">
             <div className="pivot-table-header">
               <table className="pivotTable">

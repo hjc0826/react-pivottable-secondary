@@ -32,7 +32,7 @@
 }
 
 .pivotUi .pivot-table-container .pivot-table-header {
-  overflow-y: auto;
+  overflow: auto;
 }
 
 .pivotUi .pivot-table-container .pivot-table-header > tr > td {
