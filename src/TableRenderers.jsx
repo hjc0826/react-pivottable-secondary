@@ -55,155 +55,19 @@ function redColorScaleGenerator(values) {
   };
 }
 
-function getScrollbarWidth() {
-  const scrollDiv = document.createElement('div');
-  scrollDiv.style.cssText = 'width: 99px; height: 99px; overflow: scroll; position: absolute; top: -9999px;';
-  document.body.appendChild(scrollDiv);
-  const scrollbarWidth = scrollDiv.offsetWidth - scrollDiv.clientWidth;
-  document.body.removeChild(scrollDiv);
-
-  return scrollbarWidth;
-}
-
 const DEFAULT_ROW_HEIGHT = 32; // 默认表格单行高度
-const OFFSET_HORIZONTAL = 300; // 横向滚动前、后偏移量
-
 
 function makeRenderer(opts = {}) {
-  const POSITION_TABLE_BODY = 'tableBody'; // 表示纵向滚动响应位置在表格内容上
   class TableRenderer extends React.PureComponent {
     constructor(props) {
       super(props);
-      this.getHorizontalDom = (dom) => {
-        this.horizontalDom = dom || this.horizontalDom;
-      };
-      this.getVirtualTableRef = (dom) => {
-        this.virtualTable = dom || this.virtualTable;
-        this.setVirtualSize(dom);
-      };
       this.valueCellColors = () => { };
       this.rowTotalColors = () => { };
       this.colTotalColors = () => { };
       this.getClickHandler = null;
-      this.virtualTable = null;
-      this.tableHeader = null;
-      this.virtualTableWidth = 0; // 虚拟表格宽度
-      this.scrollBarWidth = getScrollbarWidth(); // 滚动条宽度
-      this.scrollDom = null; // 纵向假滚动条节点
-      this.horizontalDom = null; // 横向滚动节点
-      this.verticalDom = null; // 纵向滚动节点
-      this.mousePosition = ''; // 鼠标所在位置，用于区别纵向滚动由哪个节点相应的
-      this.state = {
-        totalHeight: 0, // 表格内容区域总高度
-        totalWidth: 0, // 表格内容区域总宽度
-        hiddenLeftStyle: { // 左侧隐藏样式
-          width: `0px`,
-        },
-        hiddenRightStyle: { // 右侧隐藏样式
-          width: `0px`,
-        },
-        colSize: [0, 0], // 可视区域显示的列号
-      };
     }
     componentDidMount() {
-      this.setVirtualSize();
-      this.setHorizontalData();
-      // 同步两边的滚动
-      $('.pivot-table-body').on('scroll', this.asyncTableScroll);
     }
-    asyncTableScroll() {
-      var scrollLeft = $(this).prop('scrollLeft');
-      $('.pivot-table-header').prop('scrollLeft', scrollLeft);
-    }
-    // 设置虚拟表格高度、宽度
-    setVirtualSize(dom) {
-      const virtualTable = dom || this.virtualTable;
-      const width = virtualTable.clientWidth;
-      if (width) {
-        this.virtualTableWidth = width;
-      }
-    };
-
-    // getVirtualTableRef(dom) {
-    //   this.virtualTable = dom || this.virtualTable;
-    //   this.setVirtualSize(dom);
-    // };
-
-    getTableHeaderDom(dom) {
-      this.tableHeader = dom || this.tableHeader;
-    };
-
-    getVerticalDom(dom) {
-      this.verticalDom = dom || this.verticalDom;
-    };
-
-    // 设置虚拟表格横向数据；在横向滚动时使用
-    setHorizontalData() {
-      const scrollLeft = this.horizontalDom && this.horizontalDom.scrollLeft;
-      const pivotData = new PivotData(this.props);
-      const rowAttrs = pivotData.props.rows;
-      const colKeys = pivotData.getColKeys();
-      const aggregatorGather = this.props.aggregatorGather;
-      const part1 = rowAttrs.length ? rowAttrs : [undefined]
-      const part2 = rowAttrs.length !== 0 && colKeys.length !== 0 ? [undefined] : []
-      const part3 = colKeys
-      const part4 = aggregatorGather
-      const columns = [...part1, ...part2, ...part3, ...part4]
-      const { colSize: oColSize } = this.state;
-      // 表格内容可视区域的宽度
-      const width = this.virtualTableWidth;
-      const colSize = [];
-      let totalWidth = 0;
-      let hiddenLeftWidth = 0; // 左侧隐藏未被渲染的宽度
-      let hiddenRigthWidth = 0; // 右侧隐藏未被渲染的宽度
-      let currentStep = 0; // 0: 前面被隐藏阶段；1: 可视区域阶段；2: 后面不可见区域
-      if (!width) {
-        return;
-      }
-      columns.forEach((item, i) => {
-        // const { width: colWidth = 150 } = item;
-        const colWidth = 120
-        totalWidth += colWidth;
-        if (currentStep === 0) {
-          if (totalWidth >= scrollLeft - OFFSET_HORIZONTAL) {
-            // 根据 scrollLeft 算出可视区域起始行号
-            colSize[0] = i;
-            currentStep += 1;
-          } else {
-            hiddenLeftWidth += colWidth;
-          }
-        }
-        if (currentStep === 1 && totalWidth > scrollLeft + width + OFFSET_HORIZONTAL) {
-          // 计算出可视区域结束列号
-          colSize[1] = i;
-          currentStep += 1;
-        }
-        if (currentStep === 2) {
-          hiddenRigthWidth += colWidth;
-        }
-      });
-
-      if (oColSize.join() !== colSize.join()) {
-        // 可视区域的列号有了变化才重新进行渲染
-        this.setState({
-          hiddenLeftStyle: { width: `${hiddenLeftWidth}px` },
-          hiddenRightStyle: { width: `${hiddenRigthWidth}px` },
-          colSize,
-          totalWidth,
-        });
-      }
-    };
-
-    handleHorizontalScroll(e) {
-      e.stopPropagation();
-      const scrollLeft = e.target.scrollLeft;
-      // this.scrollDom && (this.scrollDom.scrollLeft = scrollLeft);
-      this.setHorizontalData();
-    };
-
-    handleBodyMouseEnter() {
-      this.mousePosition = POSITION_TABLE_BODY;
-    };
 
     tableHeaderRender() {
       const pivotData = new PivotData(this.props);
@@ -328,7 +192,6 @@ function makeRenderer(opts = {}) {
     };
 
     tableBodyRender() {
-      const { hiddenBottomStyle, hiddenLeftStyle, hiddenRightStyle, colSize, totalHeight } = this.state;
       const pivotData = new PivotData(this.props);
       const colAttrs = pivotData.props.cols.length ? concat(pivotData.props.cols, undefined) : [undefined, undefined];
       const rowAttrs = pivotData.props.rows;
@@ -346,19 +209,12 @@ function makeRenderer(opts = {}) {
       // const showCols = columns.slice(...colSize);
       const showCols = columns;
       const cols = [];
-      // if (colSize[0]) {
-      //   cols.push(<col key="first" width={hiddenLeftStyle.width} />);
-      // }
       showCols.forEach((col, i) => {
         const width = 120
-        cols.push(<col key={`${colSize[0] + i}`} width={`${width}px`} />);
+        cols.push(<col key={`${i}`} width={`${width}px`} />);
       });
-      // if (colSize[1]) {
-      //   cols.push(<col key="last" width={hiddenRightStyle.width} />);
-      // }
-
       return (
-        <div className="pivot-table-body" ref={this.getHorizontalDom} onMouseEnter={() => this.handleBodyMouseEnter()}>
+        <div className="pivot-table-body">
           <div className="table-body-total">
             <table className="pivotTable">
               <colgroup>
@@ -577,7 +433,6 @@ function makeRenderer(opts = {}) {
     }
 
     componentWillUnmount() {
-      $('.pivot-table-body').off('scroll')
     }
     render() {
       const pivotData = new PivotData(this.props);
@@ -650,20 +505,11 @@ function makeRenderer(opts = {}) {
           : null;
 
       return (
-        <div className="use-virtual-table" ref={this.getVirtualTableRef} onScroll={(e) => this.handleHorizontalScroll(e)}>
+        <div className="use-virtual-table">
           <div className="use-virtual-table-body">
             {/* {this.tableHeaderRender()} */}
             {this.tableBodyRender()}
           </div>
-          {/* <div
-            className="bar-virtual-vertical-scroll"
-            style={{ height: `${this.virtualTableHeight - (this.tableHeader.clientHeight || 34)}px`, width: `${this.scrollBarWidth}px` }}
-            onScroll={this.handleScroll}
-            ref={this.getScrollDom}
-            onMouseEnter={this.handleVerScrollMouseEnter}
-          >
-            <div className='bar-body' style={{ height: `${totalHeight}px` }} />
-          </div> */}
         </div>
       );
     }

@@ -78,6 +78,9 @@ table.pivotTable tbody tr th {
   font-size: 8pt;
   padding: 5px;
   height: 30px;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
 }
 
 table.pivotTable .pivotColLabel {
@@ -96,6 +99,9 @@ table.pivotTable tbody tr td {
   border: 1px solid rgba(0, 0, 0, 0.06);
   vertical-align: top;
   text-align: right;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
 }
 
 .pivotTotal,
