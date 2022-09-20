@@ -15,24 +15,13 @@
   -ms-user-select: none;
 }
 
-.pivotUi .pivot-table-warp {
-  clear: both;
-  height: 100%;
-}
-
-.pivotUi .pivot-table-container {
-  height: 100%;
-  display: flex;
-  flex-direction: column;
-}
-
-.pivotUi .pivot-table-container .pivot-table-body {
-  overflow: auto scroll;
+.pivotUi .pivot-table-body {
+  /* overflow: auto scroll; */
   flex: 1;
 }
 
-.pivotUi .pivot-table-container .pivot-table-header {
-  overflow: auto;
+.pivot-table-header {
+  /* overflow: scroll; */
 }
 
 .pivotUi .pivot-table-container .pivot-table-header > tr > td {
@@ -85,9 +74,10 @@ table.pivotTable thead tr th,
 table.pivotTable tbody tr th {
   background-color: #ebf0f8;
   /* border: 1px solid #c8d4e3; */
-  border: 1px solid rgba(0,0,0,.06);
+  border: 1px solid rgba(0, 0, 0, 0.06);
   font-size: 8pt;
   padding: 5px;
+  height: 30px;
 }
 
 table.pivotTable .pivotColLabel {
@@ -103,7 +93,7 @@ table.pivotTable tbody tr td {
   padding: 5px;
   background-color: #fff;
   /* border: 1px solid #c8d4e3; */
-  border: 1px solid rgba(0,0,0,.06);
+  border: 1px solid rgba(0, 0, 0, 0.06);
   vertical-align: top;
   text-align: right;
 }
@@ -428,4 +418,18 @@ table.pivotTable tbody tr td {
 
 .pivotRendererArea {
   padding: 5px;
+}
+
+.use-virtual-table {
+  position: relative;
+  height: 100%;
+  width: 100%;
+}
+.use-virtual-table-body {
+  display: flex;
+  flex-direction: column;
+  width: 100%;
+  height: 100%;
+  overflow-y: auto;
+  overflow-x: auto;
 }
